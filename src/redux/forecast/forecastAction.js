@@ -8,9 +8,7 @@ export const fetchForecasts = () => {
   return (dispatch) => {
     dispatch(fetchForecastsRequest());
 
-    return fetch(
-      "api.openweathermap.org/data/2.5/forecast?q=Rome&appid=9100cdffa778426097e9dcee8b4507cd"
-    )
+    return fetch("api.openweathermap.org/data/2.5/forecast?q=Rome&appid=")
       .then((response) => response.json())
       .then((forecasts) => dispatch(fetchForecastsSuccess(forecasts)))
       .catch((error) => dispatch(fetchForecastsError(error.message)));
