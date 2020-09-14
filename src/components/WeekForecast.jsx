@@ -1,73 +1,38 @@
 import React from "react";
-import DayCard from "./DayCard";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import { CardContent } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
 import Grid from "@material-ui/core/Grid";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    flexDirection: "row",
+    padding: theme.spacing(5),
   },
   title: {
     fontSize: 14,
-  },
-  cardContainer: {
-    width: "80%",
-    display: "flex",
-    flexWrap: "nowrap",
-    justifyContent: "center",
+    alignContent: "center",
   },
 }));
+
+const arrayData = ["Title", "Title", "Title", "Title", "Title"];
+let idCount = 1;
 
 const WeekForecast = () => {
   const classes = useStyles();
 
   return (
-    /*<div className="row m-0 justify-content-center">
-            <div className={classes.cardContainer} >*/
-    <Grid container className={classes.root}>
-      <Grid item xs={12}>
-        <Grid container justify="center">
-          <Grid item spacing={2}>
-            <Card className={classes.root}>
-              <CardContent>
-                <Typography className={classes.title}>Title</Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item spacing={2}>
-            <Card className={classes.root}>
-              <CardContent>
-                <Typography className={classes.title}>Title</Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item spacing={2}>
-            <Card className={classes.root}>
-              <CardContent>
-                <Typography className={classes.title}>Title</Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item spacing={2}>
-            <Card className={classes.root}>
-              <CardContent>
-                <Typography className={classes.title}>Title</Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item spacing={2}>
-            <Card className={classes.root}>
-              <CardContent>
-                <Typography className={classes.title}>Title</Typography>
-              </CardContent>
-            </Card>
-          </Grid>
+    <Grid container spacing={2} className={classes.root}>
+      {arrayData.map((data) => (
+        <Grid item xs key={idCount++}>
+          <Card>
+            <CardContent>
+              <Typography className={classes.title}>data</Typography>
+            </CardContent>
+          </Card>
         </Grid>
-      </Grid>
+      ))}
     </Grid>
   );
 };
