@@ -6,38 +6,65 @@ import Card from "@material-ui/core/Card";
 import Grid from "@material-ui/core/Grid";
 import { fetchForecasts } from "../redux/forecast/forecastAction";
 import { connect } from "react-redux";
+import CardHeader from "@material-ui/core/CardHeader";
+import CardMedia from "@material-ui/core/CardMedia";
+import CardActionArea from "@material-ui/core/CardActionArea";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     padding: theme.spacing(5),
+    alignItems: "stretch",
   },
-  title: {
-    fontSize: 14,
+  cardStyle: {
     alignContent: "center",
+    maxWidth: 150,
+  },
+  media: {
+    height: 0,
+    paddingTop: "56.25%", // 16:9
+  },
+  content: {
+    display: "flex",
+    justifyContent: "space-between",
   },
 }));
 
-const arrayData = ["Title", "Title", "Title", "Title", "Title"];
-let idCount = 1;
-
-const WeekForecast = ({ forecast, fetchForecasts }) => {
+const WeekForecast = ({ forecasts, fetchForecasts }) => {
   useEffect(() => {
     fetchForecasts();
   }, []);
 
-  console.log("forecast data in WeekForecast", forecast);
-
   const classes = useStyles();
 
   return (
-    <Grid container spacing={2} className={classes.root}>
-      {arrayData.map((data) => (
-        <Grid item xs key={idCount++}>
-          <Card>
-            <CardContent>
-              <Typography className={classes.title}>data</Typography>
-            </CardContent>
+    <Grid item container spacing={2} className={classes.root}>
+      {forecasts.map((data) => (
+        <Grid item xs md key={data.id}>
+          <Card className={classes.cardStyle}>
+            <CardActionArea>
+              <CardHeader
+                title={data.dateToDisplay}
+                subheader={data.dayOfWeek}
+                titleTypographyProps={{ align: "center" }}
+                subheaderTypographyProps={{ align: "center" }}
+              />
+
+              <CardMedia
+                className={classes.media}
+                image={
+                  "http://openweathermap.org/img/wn/" + data.icon + "@2x.png"
+                }
+                title={data.description}
+              />
+
+              <CardContent className={classes.content}>
+                <Typography>{data.temp_max + "°"}</Typography>
+                <Typography color="textSecondary">
+                  {data.temp_min + "°"}
+                </Typography>
+              </CardContent>
+            </CardActionArea>
           </Card>
         </Grid>
       ))}
