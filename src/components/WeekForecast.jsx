@@ -4,7 +4,10 @@ import { CardContent } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
 import Grid from "@material-ui/core/Grid";
-import { fetchForecasts } from "../redux/forecast/forecastAction";
+import {
+  fetchForecasts,
+  getDailyDetails,
+} from "../redux/forecast/forecastAction";
 import { connect } from "react-redux";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -30,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const WeekForecast = ({ forecasts, fetchForecasts }) => {
+const WeekForecast = ({ forecasts, fetchForecasts, changeDetails }) => {
   useEffect(() => {
     fetchForecasts();
   }, []);
@@ -42,7 +45,7 @@ const WeekForecast = ({ forecasts, fetchForecasts }) => {
       {forecasts.map((data) => (
         <Grid item xs md key={data.id}>
           <Card className={classes.cardStyle}>
-            <CardActionArea>
+            <CardActionArea onClick={() => changeDetails(data.id)}>
               <CardHeader
                 title={data.dateToDisplay}
                 subheader={data.dayOfWeek}
@@ -81,6 +84,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchForecasts: () => dispatch(fetchForecasts()),
+    changeDetails: (date) => dispatch(getDailyDetails(date)),
   };
 };
 
