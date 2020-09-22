@@ -8,25 +8,29 @@ import { manageDataFetched } from "./manageDataFetched";
 
 let forecastsData;
 
-export const fetchForecasts = () => {
+export const fetchForecasts = (locationToLoad = "Roma,IT") => {
   return (dispatch) => {
     dispatch(fetchForecastsRequest());
 
     return forecastsData
       ? forecastsData
       : fetch(
-          "https://api.openweathermap.org/data/2.5/forecast?q=Roma,IT&units=metric&appid=" +
+          "https://api.openweathermap.org/data/2.5/forecast?q=" +
+            locationToLoad +
+            "&units=metric&appid=" +
             process.env.REACT_APP_WEATHER_API_KEY
         )
           .then((response) => response.json())
           .then((forecasts) => {
             forecastsData = forecasts;
+            const location =
+              forecasts.city.name + ", " + forecasts.city.country;
             const structuredData = manageDataFetched([forecasts]);
 
             // settaggio nello state del dettaglio giornaliero del primo giorno
             dispatch(getDailyDetails(structuredData[0].id));
 
-            return structuredData;
+            return { forecasts: structuredData, location };
           })
           .then((forecasts) => dispatch(fetchForecastsSuccess(forecasts)))
           .catch((error) => dispatch(fetchForecastsError(error.message)));
@@ -61,5 +65,11 @@ export const getDailyDetails = (date) => {
   return {
     type: GET_DAILY_DETAILS_BY_DATE,
     payload: dailyDetails,
+  };
+};
+
+export const changeLocation = (locationToFetch) => {
+  return (dispatch) => {
+    dispatch(fetchForecasts(locationToFetch));
   };
 };

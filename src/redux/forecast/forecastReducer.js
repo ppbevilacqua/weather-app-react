@@ -3,6 +3,7 @@ import {
   FETCH_FORECAST_SUCCESS,
   FETCH_FORECAST_FAILURE,
   GET_DAILY_DETAILS_BY_DATE,
+  CHANGE_LOCATION,
 } from "./forecastType";
 
 const initialState = {
@@ -10,6 +11,8 @@ const initialState = {
   forecasts: [],
   error: "",
   dailyDetails: {},
+  location: "",
+  locationToFetch: "",
 };
 
 const forecastReducer = (state = initialState, action) => {
@@ -24,7 +27,9 @@ const forecastReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        forecasts: action.payload,
+        forecasts: action.payload.forecasts,
+        location: action.payload.location,
+        locationToFetch: "",
       };
 
     case FETCH_FORECAST_FAILURE:
@@ -38,6 +43,13 @@ const forecastReducer = (state = initialState, action) => {
       return {
         ...state,
         dailyDetails: action.payload,
+      };
+
+    case CHANGE_LOCATION:
+      return {
+        ...state,
+        locationToFetch: action.payload,
+        loading: true,
       };
 
     default:

@@ -1,19 +1,21 @@
 import React from "react";
+import { connect } from "react-redux";
 import { AppBar, fade, Toolbar } from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Typography from "@material-ui/core/Typography";
 import SearchIcon from "@material-ui/icons/Search";
 import InputBase from "@material-ui/core/InputBase";
+import { changeLocation } from "../redux/forecast/forecastAction";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
+    justifyContent: "space-between",
   },
   title: {
     flexGrow: 1,
     display: "none",
     [theme.breakpoints.up("sm")]: {
-      display: "block",
+      display: "flex",
     },
   },
   search: {
@@ -24,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: fade(theme.palette.common.white, 0.25),
     },
     marginLeft: 0,
-    width: "100%",
+    width: "75%",
     [theme.breakpoints.up("sm")]: {
       marginLeft: theme.spacing(1),
       width: "auto",
@@ -55,21 +57,31 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
+  city: {
+    flexGrow: 1,
+    alignSelf: "center",
+  },
 }));
 
-const NavBar = () => {
+const NavBar = ({ location }) => {
   const classes = useStyles();
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" className={classes.root}>
       <Toolbar>
         <Typography className={classes.title} variant="h5" noWrap>
           Weather app
         </Typography>
+
+        <Typography variant="h6" className={classes.city}>
+          {location}
+        </Typography>
+
         <div className={classes.search}>
           <div className={classes.searchIcon}>
             <SearchIcon />
           </div>
+
           <InputBase
             placeholder="Search location"
             classes={{
@@ -84,4 +96,17 @@ const NavBar = () => {
   );
 };
 
-export default NavBar;
+const mapStateToProps = (state) => {
+  return {
+    location: state.forecasts.location,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    changeLocation: (locationToFetch) =>
+      dispatch(changeLocation(locationToFetch)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(NavBar);

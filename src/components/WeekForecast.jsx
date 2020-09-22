@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     padding: theme.spacing(5),
     alignItems: "stretch",
+    justifyContent: "space-between",
   },
   cardStyle: {
     alignContent: "center",
@@ -43,7 +44,7 @@ const WeekForecast = ({ forecasts, fetchForecasts, changeDetails }) => {
   return (
     <Grid item container spacing={2} className={classes.root}>
       {forecasts.map((data) => (
-        <Grid item xs md key={data.id}>
+        <Grid item xl md sm={4} xs={6} key={data.id}>
           <Card className={classes.cardStyle}>
             <CardActionArea onClick={() => changeDetails(data.id)}>
               <CardHeader
