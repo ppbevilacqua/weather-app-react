@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { AppBar, fade, Toolbar } from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
@@ -10,6 +10,7 @@ import { changeLocation } from "../redux/forecast/forecastAction";
 const useStyles = makeStyles((theme) => ({
   root: {
     justifyContent: "space-between",
+    backgroundColor: "#0F4C81;",
   },
   title: {
     flexGrow: 1,
@@ -63,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NavBar = ({ location }) => {
+const NavBar = ({ location, changeLocation }) => {
   const classes = useStyles();
 
   return (

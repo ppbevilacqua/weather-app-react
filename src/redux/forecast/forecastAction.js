@@ -3,6 +3,7 @@ import {
   FETCH_FORECAST_SUCCESS,
   FETCH_FORECAST_FAILURE,
   GET_DAILY_DETAILS_BY_DATE,
+  CHANGE_LOCATION,
 } from "./forecastType";
 import { manageDataFetched } from "./manageDataFetched";
 
@@ -69,7 +70,13 @@ export const getDailyDetails = (date) => {
 };
 
 export const changeLocation = (locationToFetch) => {
+  console.log(locationToFetch);
   return (dispatch) => {
     dispatch(fetchForecasts(locationToFetch));
+
+    return {
+      type: CHANGE_LOCATION,
+      payload: locationToFetch,
+    };
   };
 };

@@ -9,23 +9,35 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
-import { getDailyDetails } from "../redux/forecast/forecastAction";
 import { connect } from "react-redux";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    justifyContent: "center",
   },
   table: {
-    paddingRight: theme.spacing(8),
-    paddingLeft: theme.spacing(8),
+    paddingRight: theme.spacing(1),
+    paddingLeft: theme.spacing(1),
+    [theme.breakpoints.up("md")]: {
+      paddingRight: theme.spacing(16),
+      paddingLeft: theme.spacing(16),
+    },
   },
   box: {
     display: "flex",
     flexDirection: "row",
+    flexWrap: "wrap",
     justifyContent: "center",
-    alignSelf: "center",
+    alignItems: "center",
+    padding: 0,
+  },
+  cell: {
+    textAlign: "center",
+    padding: 0,
+  },
+  cellBox: {
+    padding: theme.spacing(1),
   },
 }));
 
@@ -38,23 +50,25 @@ const DailyDetails = ({ dailyDetails }) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Hour</TableCell>
-              <TableCell>Weather</TableCell>
-              <TableCell>T (°C)</TableCell>
-              <TableCell>Humidity (%)</TableCell>
-              <TableCell>Wind (km/h)</TableCell>
+              <TableCell className={classes.cell}>Hour</TableCell>
+              <TableCell className={classes.cell}>Weather</TableCell>
+              <TableCell className={classes.cell}>T (°C)</TableCell>
+              <TableCell className={classes.cell}>Humidity (%)</TableCell>
+              <TableCell className={classes.cell}>Wind (km/h)</TableCell>
             </TableRow>
           </TableHead>
 
           <TableBody>
             {dailyDetails.map((item) => (
               <TableRow key={item.dt}>
-                <TableCell>{item.dt_txt.split(" ")[1].slice(0, 5)}</TableCell>
-                <TableCell>
+                <TableCell className={classes.cell}>
+                  {item.dt_txt.split(" ")[1].slice(0, 5)}
+                </TableCell>
+                <TableCell className={classes.cellBox}>
                   <Box className={classes.box}>
                     <Avatar
                       variant="square"
-                      alt="ciao"
+                      alt="iconWeather"
                       src={
                         "http://openweathermap.org/img/wn/" +
                         item.weather[0].icon +
@@ -64,9 +78,13 @@ const DailyDetails = ({ dailyDetails }) => {
                     <Typography>{item.weather[0].description}</Typography>
                   </Box>
                 </TableCell>
-                <TableCell>{item.main.temp}</TableCell>
-                <TableCell>{item.main.humidity}</TableCell>
-                <TableCell>{item.wind.speed}</TableCell>
+                <TableCell className={classes.cell}>{item.main.temp}</TableCell>
+                <TableCell className={classes.cell}>
+                  {item.main.humidity}
+                </TableCell>
+                <TableCell className={classes.cell}>
+                  {(item.wind.speed * 3.6).toFixed(2)}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -74,7 +92,11 @@ const DailyDetails = ({ dailyDetails }) => {
       </Grid>
     </Grid>
   ) : (
-    <Typography>Loading...</Typography>
+    <Grid container justify={"center"}>
+      <Grid item>
+        <CircularProgress />
+      </Grid>
+    </Grid>
   );
 };
 
@@ -84,10 +106,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    getDailyDetails: (date) => dispatch(getDailyDetails(date)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(DailyDetails);
+export default connect(mapStateToProps)(DailyDetails);
